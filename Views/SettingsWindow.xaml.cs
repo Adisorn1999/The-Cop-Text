@@ -3,8 +3,9 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Media;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfApp1;
 namespace WpfApp1.Views;
 
@@ -21,6 +22,8 @@ public partial class SettingsWindow : Window
 
         DarkModeToggle.IsChecked =
             _mainWindow.IsDarkModeEnabled;
+        SetActiveMenu(
+    GeneralMenu);
     }
     private void ExportButton_Click(
         object sender,
@@ -98,40 +101,81 @@ public partial class SettingsWindow : Window
     }
 
     private void GeneralMenu_Click(
-        object sender,
-        MouseButtonEventArgs e)
+    object sender,
+    MouseButtonEventArgs e)
     {
-        HideAllPanels();
+        SetActiveMenu(
+            GeneralMenu);
 
         GeneralPanel.Visibility =
             Visibility.Visible;
+
+        BackupPanel.Visibility =
+            Visibility.Collapsed;
+
+        SystemPanel.Visibility =
+            Visibility.Collapsed;
+
+        AboutPanel.Visibility =
+            Visibility.Collapsed;
     }
 
     private void BackupMenu_Click(
-        object sender,
-        MouseButtonEventArgs e)
+    object sender,
+    MouseButtonEventArgs e)
     {
-        HideAllPanels();
+        SetActiveMenu(
+            BackupMenu);
+
+        GeneralPanel.Visibility =
+            Visibility.Collapsed;
 
         BackupPanel.Visibility =
             Visibility.Visible;
+
+        SystemPanel.Visibility =
+            Visibility.Collapsed;
+
+        AboutPanel.Visibility =
+            Visibility.Collapsed;
     }
 
+
     private void SystemMenu_Click(
-        object sender,
-        MouseButtonEventArgs e)
+    object sender,
+    MouseButtonEventArgs e)
     {
-        HideAllPanels();
+        SetActiveMenu(
+            SystemMenu);
+
+        GeneralPanel.Visibility =
+            Visibility.Collapsed;
+
+        BackupPanel.Visibility =
+            Visibility.Collapsed;
 
         SystemPanel.Visibility =
             Visibility.Visible;
+
+        AboutPanel.Visibility =
+            Visibility.Collapsed;
     }
 
     private void AboutMenu_Click(
-        object sender,
-        MouseButtonEventArgs e)
+    object sender,
+    MouseButtonEventArgs e)
     {
-        HideAllPanels();
+        SetActiveMenu(
+            AboutMenu);
+
+        GeneralPanel.Visibility =
+            Visibility.Collapsed;
+
+        BackupPanel.Visibility =
+            Visibility.Collapsed;
+
+        SystemPanel.Visibility =
+            Visibility.Collapsed;
 
         AboutPanel.Visibility =
             Visibility.Visible;
@@ -232,14 +276,48 @@ public partial class SettingsWindow : Window
     object sender,
     RoutedEventArgs e)
     {
-       
+
     }
 
     private void SystemToggle_Unchecked(
         object sender,
         RoutedEventArgs e)
     {
-       
-    }
 
+    }
+    private void SetActiveMenu(
+    Border activeMenu)
+    {
+        // reset ทุกเมนู
+        ResetMenu(GeneralMenu);
+        ResetMenu(BackupMenu);
+        ResetMenu(SystemMenu);
+        ResetMenu(AboutMenu);
+
+        // active menu ปัจจุบัน
+        activeMenu.Background =
+            (System.Windows.Media.Brush)FindResource(
+                "MenuActiveBackground");
+
+        activeMenu.BorderBrush =
+            new SolidColorBrush(
+                (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(
+                    "#4A90E2"));
+
+        activeMenu.BorderThickness =
+            new Thickness(3, 0, 0, 0);
+    }
+    private void ResetMenu(
+    Border menu)
+    {
+        menu.Background =
+            (System.Windows.Media.Brush)FindResource(
+                "SidebarBackground");
+
+        menu.BorderBrush =
+            System.Windows.Media.Brushes.Transparent;
+
+        menu.BorderThickness =
+            new Thickness(0);
+    }
 }

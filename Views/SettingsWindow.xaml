@@ -54,202 +54,215 @@
 
                 </StackPanel>
 
-                <!-- MENUS -->
-                <!-- MENUS -->
-                <StackPanel Grid.Row="1">
 
-                    <!-- GENERAL -->
-                    <Border x:Name="GeneralMenu"
-            Background="{DynamicResource MenuActiveBackground}"
-            CornerRadius="18"
-            Padding="18"
-            Margin="0,0,0,12"
-            Cursor="Hand"
-            MouseLeftButtonUp="GeneralMenu_Click">
+                    <!-- MENUS -->
+                    <StackPanel Grid.Row="1">
 
-                        <Border.Style>
-
-                            <Style TargetType="Border">
-
-                                <Setter Property="Opacity"
-                        Value="1"/>
-
-                                <Style.Triggers>
-
-                                    <!-- HOVER -->
-                                    <Trigger Property="IsMouseOver"
-                             Value="True">
-
-                                        <Setter Property="Opacity"
-                                Value="0.92"/>
-
-                                    </Trigger>
-
-                                </Style.Triggers>
-
-                            </Style>
-
-                        </Border.Style>
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <TextBlock Text="⚙"
-                       FontSize="20"
-                       Margin="0,0,10,0"/>
-
-                            <TextBlock Text="ทั่วไป"
-                       FontSize="17"
-                       FontWeight="SemiBold"
-                       Foreground="{DynamicResource PrimaryText}"
-                       VerticalAlignment="Center"/>
-
-                        </StackPanel>
-
-                    </Border>
-
-                    <!-- BACKUP -->
-                    <Border x:Name="BackupMenu"
+                        <!-- GENERAL -->
+                        <Border x:Name="GeneralMenu"
             Background="{DynamicResource SidebarBackground}"
             CornerRadius="18"
             Padding="18"
             Margin="0,0,0,12"
             Cursor="Hand"
-            MouseLeftButtonUp="BackupMenu_Click">
+            MouseLeftButtonUp="GeneralMenu_Click"
+            BorderBrush="Transparent"
+            BorderThickness="0">
 
-                        <Border.Style>
+                            <Border.Style>
 
-                            <Style TargetType="Border">
+                                <Style TargetType="Border">
 
-                                <Setter Property="Opacity"
+                                    <Setter Property="Opacity"
                         Value="1"/>
 
-                                <Style.Triggers>
+                                    <Style.Triggers>
 
-                                    <Trigger Property="IsMouseOver"
+                                        <Trigger Property="IsMouseOver"
                              Value="True">
 
-                                        <Setter Property="Opacity"
+                                            <Setter Property="Opacity"
                                 Value="0.92"/>
 
-                                    </Trigger>
+                                        </Trigger>
 
-                                </Style.Triggers>
+                                    </Style.Triggers>
 
-                            </Style>
+                                </Style>
 
-                        </Border.Style>
+                            </Border.Style>
 
-                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                            <TextBlock Text="💾"
+                                <TextBlock Text="⚙"
                        FontSize="20"
                        Margin="0,0,10,0"/>
 
-                            <TextBlock Text="สำรองข้อมูล"
-                       FontSize="17"
-                       Foreground="{DynamicResource PrimaryText}"
-                       VerticalAlignment="Center"/>
+                                <StackPanel>
 
-                        </StackPanel>
+                                    <TextBlock Text="ทั่วไป"
+                           FontSize="17"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryText}"/>
 
-                    </Border>
+                                    <TextBlock Text="General"
+                           FontSize="12"
+                           Foreground="{DynamicResource SecondaryText}"/>
 
-                    <!-- SYSTEM -->
-                    <Border x:Name="SystemMenu"
+                                </StackPanel>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- BACKUP -->
+                        <Border x:Name="BackupMenu"
             Background="{DynamicResource SidebarBackground}"
             CornerRadius="18"
             Padding="18"
             Margin="0,0,0,12"
             Cursor="Hand"
-            MouseLeftButtonUp="SystemMenu_Click">
+            MouseLeftButtonUp="BackupMenu_Click"
+            BorderBrush="Transparent"
+            BorderThickness="0">
 
-                        <Border.Style>
+                            <Border.Style>
 
-                            <Style TargetType="Border">
+                                <Style TargetType="Border">
 
-                                <Setter Property="Opacity"
+                                    <Setter Property="Opacity"
                         Value="1"/>
 
-                                <Style.Triggers>
+                                    <Style.Triggers>
 
-                                    <Trigger Property="IsMouseOver"
+                                        <Trigger Property="IsMouseOver"
                              Value="True">
 
-                                        <Setter Property="Opacity"
+                                            <Setter Property="Opacity"
                                 Value="0.92"/>
 
-                                    </Trigger>
+                                        </Trigger>
 
-                                </Style.Triggers>
+                                    </Style.Triggers>
 
-                            </Style>
+                                </Style>
 
-                        </Border.Style>
+                            </Border.Style>
 
-                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                            <TextBlock Text="⌨"
+                                <TextBlock Text="💾"
                        FontSize="20"
                        Margin="0,0,10,0"/>
 
-                            <TextBlock Text="ระบบ"
+                                <TextBlock Text="สำรองข้อมูล"
                        FontSize="17"
                        Foreground="{DynamicResource PrimaryText}"
                        VerticalAlignment="Center"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
-                    </Border>
+                        </Border>
 
-                    <!-- ABOUT -->
-                    <Border x:Name="AboutMenu"
+                        <!-- SYSTEM -->
+                        <Border x:Name="SystemMenu"
+            Background="{DynamicResource SidebarBackground}"
+            CornerRadius="18"
+            Padding="18"
+            Margin="0,0,0,12"
+            Cursor="Hand"
+            MouseLeftButtonUp="SystemMenu_Click"
+            BorderBrush="Transparent"
+            BorderThickness="0">
+
+                            <Border.Style>
+
+                                <Style TargetType="Border">
+
+                                    <Setter Property="Opacity"
+                        Value="1"/>
+
+                                    <Style.Triggers>
+
+                                        <Trigger Property="IsMouseOver"
+                             Value="True">
+
+                                            <Setter Property="Opacity"
+                                Value="0.92"/>
+
+                                        </Trigger>
+
+                                    </Style.Triggers>
+
+                                </Style>
+
+                            </Border.Style>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <TextBlock Text="⌨"
+                       FontSize="20"
+                       Margin="0,0,10,0"/>
+
+                                <TextBlock Text="ระบบ"
+                       FontSize="17"
+                       Foreground="{DynamicResource PrimaryText}"
+                       VerticalAlignment="Center"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- ABOUT -->
+                        <Border x:Name="AboutMenu"
             Background="{DynamicResource SidebarBackground}"
             CornerRadius="18"
             Padding="18"
             Cursor="Hand"
-            MouseLeftButtonUp="AboutMenu_Click">
+            MouseLeftButtonUp="AboutMenu_Click"
+            BorderBrush="Transparent"
+            BorderThickness="0">
 
-                        <Border.Style>
+                            <Border.Style>
 
-                            <Style TargetType="Border">
+                                <Style TargetType="Border">
 
-                                <Setter Property="Opacity"
+                                    <Setter Property="Opacity"
                         Value="1"/>
 
-                                <Style.Triggers>
+                                    <Style.Triggers>
 
-                                    <Trigger Property="IsMouseOver"
+                                        <Trigger Property="IsMouseOver"
                              Value="True">
 
-                                        <Setter Property="Opacity"
+                                            <Setter Property="Opacity"
                                 Value="0.92"/>
 
-                                    </Trigger>
+                                        </Trigger>
 
-                                </Style.Triggers>
+                                    </Style.Triggers>
 
-                            </Style>
+                                </Style>
 
-                        </Border.Style>
+                            </Border.Style>
 
-                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                            <TextBlock Text="ⓘ"
+                                <TextBlock Text="ⓘ"
                        FontSize="20"
                        Margin="0,0,10,0"/>
 
-                            <TextBlock Text="เกี่ยวกับ"
+                                <TextBlock Text="เกี่ยวกับ"
                        FontSize="17"
                        Foreground="{DynamicResource PrimaryText}"
                        VerticalAlignment="Center"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
-                    </Border>
+                        </Border>
 
-                </StackPanel>
-
-                <!-- FOOTER -->
+                    </StackPanel>
+                    <!-- FOOTER -->
                 <StackPanel Grid.Row="2"
                             Margin="0,20,0,0">
 
