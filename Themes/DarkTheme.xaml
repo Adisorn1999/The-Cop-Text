@@ -33,5 +33,16 @@
                      Color="#FF5A5F"/>
     <SolidColorBrush x:Key="MenuActiveBackground"
                  Color="#252830"/>
+    <Color x:Key="SelectedCardColor">
+        #162033
+    </Color>
+
+    <SolidColorBrush x:Key="SelectedCardBrush"
+                 Color="{StaticResource SelectedCardColor}"/>
+    <SolidColorBrush x:Key="SelectedPrimaryText"
+                 Color="White"/>
+
+    <SolidColorBrush x:Key="SelectedSecondaryText"
+                 Color="#D6E4FF"/>
 
 </ResourceDictionary>

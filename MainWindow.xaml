@@ -376,21 +376,30 @@
                                     BorderBrush="{DynamicResource BorderColor}"
                                     BorderThickness="1"
                                     MinHeight="90">
+                                <Border.Effect>
 
+                                    <DropShadowEffect BlurRadius="20"
+                      ShadowDepth="0"
+                      Color="#4A90E2"
+                      Opacity="0.12"/>
+
+                                </Border.Effect>
                                 <StackPanel>
 
-                                    <TextBlock Text="{Binding Keyword}"
-                                               FontSize="20"
-                                               FontWeight="SemiBold"
-                                               Foreground="{DynamicResource PrimaryText}"/>
+                                    <TextBlock x:Name="KeywordText"
+           Text="{Binding Keyword}"
+           FontSize="20"
+           FontWeight="SemiBold"
+           Foreground="{DynamicResource PrimaryText}"/>
 
-                                    <TextBlock Text="{Binding Content}"
-                                               Margin="0,8,0,0"
-                                               FontSize="13"
-                                               Foreground="{DynamicResource SecondaryText}"
-                                               TextWrapping="Wrap"
-                                               TextTrimming="CharacterEllipsis"
-                                               MaxHeight="40"/>
+                                    <TextBlock x:Name="ContentText"
+           Text="{Binding Content}"
+           Margin="0,8,0,0"
+           FontSize="13"
+           Foreground="{DynamicResource SecondaryText}"
+           TextWrapping="Wrap"
+           TextTrimming="CharacterEllipsis"
+           MaxHeight="40"/>
 
                                 </StackPanel>
 
@@ -400,15 +409,27 @@
                             <DataTemplate.Triggers>
 
                                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListBoxItem}, Path=IsSelected}"
-                                             Value="True">
+             Value="True">
 
                                     <Setter TargetName="CardBorder"
-                                            Property="Background"
-                                            Value="{DynamicResource MenuActiveBackground}"/>
+            Property="Background"
+           Value="{DynamicResource SelectedCardBrush}"/>
 
                                     <Setter TargetName="CardBorder"
-                                            Property="BorderThickness"
-                                            Value="2"/>
+            Property="BorderBrush"
+            Value="#4A90E2"/>
+
+                                    <Setter TargetName="CardBorder"
+            Property="BorderThickness"
+            Value="2"/>
+
+                                    <Setter TargetName="KeywordText"
+        Property="TextBlock.Foreground"
+        Value="{DynamicResource SelectedPrimaryText}"/>
+
+                                    <Setter TargetName="ContentText"
+        Property="TextBlock.Foreground"
+        Value="{DynamicResource SelectedSecondaryText}"/>
 
                                 </DataTrigger>
 
