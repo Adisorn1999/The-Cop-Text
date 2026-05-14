@@ -1,6 +1,6 @@
  (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
 diff --git a/Services/GlobalHookService.cs b/Services/GlobalHookService.cs
-index 8a9aa100ed7e39ed4b24bc48e90be93a9424f059..458e435ac43a48ced29fff6fdce70770222bebf3 100644
+index 8a9aa100ed7e39ed4b24bc48e90be93a9424f059..e5f3e180440151a2e955a51f1148e5c8f2a753cc 100644
 --- a/Services/GlobalHookService.cs
 +++ b/Services/GlobalHookService.cs
 @@ -56,50 +56,78 @@ public class GlobalHookService : IDisposable
@@ -82,6 +82,77 @@ index 8a9aa100ed7e39ed4b24bc48e90be93a9424f059..458e435ac43a48ced29fff6fdce70770
          if (c == '\0')
          {
              return;
+@@ -132,50 +160,70 @@ public class GlobalHookService : IDisposable
+         }
+     }
+ 
+     private static char GetCharFromKey(Forms.Keys key)
+     {
+         if (key >= Forms.Keys.A && key <= Forms.Keys.Z)
+         {
+             return key.ToString().ToLower()[0];
+         }
+ 
+         if (key >= Forms.Keys.NumPad0 && key <= Forms.Keys.NumPad9)
+         {
+             return (char)('0' + (key - Forms.Keys.NumPad0));
+         }
+ 
+         if (key >= Forms.Keys.D0 && key <= Forms.Keys.D9)
+         {
+             return (char)('0' + (key - Forms.Keys.D0));
+         }
+ 
+         if (key == Forms.Keys.OemPeriod || key == Forms.Keys.Decimal)
+         {
+             return '.';
+         }
+ 
++        if (key == Forms.Keys.Add || key == Forms.Keys.Oemplus)
++        {
++            return '+';
++        }
++
++        if (key == Forms.Keys.Subtract || key == Forms.Keys.OemMinus)
++        {
++            return '-';
++        }
++
++        if (key == Forms.Keys.Multiply)
++        {
++            return '*';
++        }
++
++        if (key == Forms.Keys.Divide || key == Forms.Keys.OemQuestion)
++        {
++            return '/';
++        }
++
+         return '\0';
+     }
+ 
+     private static void ReplaceText(string keyword, string replacement)
+     {
+         Thread.Sleep(AppSettings.ExpandDelay);
+ 
+         for (int i = 0; i < keyword.Length + 1; i++)
+         {
+             Forms.SendKeys.SendWait("{BACKSPACE}");
+         }
+ 
+         Thread.Sleep(AppSettings.BeforePasteDelay);
+ 
+         var hadClipboardText =
+             System.Windows.Clipboard.ContainsText();
+ 
+         var oldClipboard =
+             hadClipboardText ? System.Windows.Clipboard.GetText() : string.Empty;
+ 
+         System.Windows.Clipboard.SetText(replacement);
+ 
+         Forms.SendKeys.SendWait("^v");
+ 
+         Thread.Sleep(AppSettings.AfterPasteDelay);
  
 EOF
 )

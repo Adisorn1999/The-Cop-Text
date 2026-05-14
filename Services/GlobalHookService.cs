@@ -181,6 +181,25 @@ public class GlobalHookService : IDisposable
         {
             return '.';
         }
+        if (key == Forms.Keys.Add || key == Forms.Keys.Oemplus)
+        {
+            return '+';
+        }
+
+        if (key == Forms.Keys.Subtract || key == Forms.Keys.OemMinus)
+        {
+            return '-';
+        }
+
+        if (key == Forms.Keys.Multiply)
+        {
+            return '*';
+        }
+
+        if (key == Forms.Keys.Divide || key == Forms.Keys.OemQuestion)
+        {
+            return '/';
+        }
 
         return '\0';
     }
