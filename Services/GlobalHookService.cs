@@ -161,7 +161,7 @@ public class GlobalHookService : IDisposable
     {
         Thread.Sleep(AppSettings.ExpandDelay);
 
-        for (int i = 0; i < keyword.Length + 1; i++)
+        for (int i = 0; i < keyword.Length; i++)
         {
             Forms.SendKeys.SendWait("{BACKSPACE}");
         }
@@ -177,6 +177,12 @@ public class GlobalHookService : IDisposable
         System.Windows.Clipboard.SetText(replacement);
 
         Forms.SendKeys.SendWait("^v");
+
+        Thread.Sleep(AppSettings.AfterPasteDelay);
+
+        // บางแอป (เช่น chat input บางตัว) อาจไม่รับ Ctrl+V ในบางจังหวะ
+        // ส่ง Shift+Insert เป็น fallback เพื่อเพิ่มโอกาสวางสำเร็จ
+        Forms.SendKeys.SendWait("+{INSERT}");
 
         Thread.Sleep(AppSettings.AfterPasteDelay);
 
