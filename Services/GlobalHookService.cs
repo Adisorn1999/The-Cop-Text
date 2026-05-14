@@ -78,6 +78,34 @@ public class GlobalHookService : IDisposable
             return;
         }
 
+        if (e.Control || e.Alt || e.KeyCode == Forms.Keys.LWin || e.KeyCode == Forms.Keys.RWin)
+        {
+            lock (_syncRoot)
+            {
+                _buffer.Clear();
+            }
+            return;
+        }
+
+        if (e.KeyCode == Forms.Keys.Delete ||
+            e.KeyCode == Forms.Keys.Escape ||
+            e.KeyCode == Forms.Keys.Tab ||
+            e.KeyCode == Forms.Keys.Left ||
+            e.KeyCode == Forms.Keys.Right ||
+            e.KeyCode == Forms.Keys.Up ||
+            e.KeyCode == Forms.Keys.Down ||
+            e.KeyCode == Forms.Keys.Home ||
+            e.KeyCode == Forms.Keys.End ||
+            e.KeyCode == Forms.Keys.PageUp ||
+            e.KeyCode == Forms.Keys.PageDown)
+        {
+            lock (_syncRoot)
+            {
+                _buffer.Clear();
+            }
+            return;
+        }
+
         if (e.KeyCode == Forms.Keys.Back)
         {
             lock (_syncRoot)
