@@ -1,148 +1,155 @@
 ﻿using Gma.System.MouseKeyHook;
 using System.Text;
 using Forms = System.Windows.Forms;
-using System.Linq;
 using WpfApp1.Data;
-using System.Windows;
+using WpfApp1.Models;
+
 namespace WpfApp1.Services;
 
-public class GlobalHookService
+public class GlobalHookService : IDisposable
 {
     private IKeyboardMouseEvents? _hook;
 
     private readonly StringBuilder _buffer =
         new();
 
+    private readonly object _syncRoot =
+        new();
+
     private readonly SQLiteService _db =
         new();
+
+    private List<Snippet> _cachedSnippets =
+        new();
+
     public bool IsEnabled =
-    true;
+        true;
+
     public event Action<bool>? OnToggleChanged;
+
     public void Start()
     {
         _hook =
             Hook.GlobalEvents();
 
         _hook.KeyDown += Hook_KeyDown;
+
+        RefreshSnippets();
+    }
+
+    public void RefreshSnippets()
+    {
+        _cachedSnippets =
+            _db.GetAllSnippets();
+    }
+
+    public void Stop()
+    {
+        if (_hook == null)
+        {
+            return;
+        }
+
+        _hook.KeyDown -= Hook_KeyDown;
+
+        _hook.Dispose();
+
+        _hook = null;
+    }
+
+    public void Dispose()
+    {
+        Stop();
     }
 
     private void Hook_KeyDown(
-    object? sender,
-    Forms.KeyEventArgs e)
-
+        object? sender,
+        Forms.KeyEventArgs e)
     {
-        // CTRL + F12
-        if (e.Control &&
-            e.KeyCode == Forms.Keys.F12)
+        if (e.Control && e.KeyCode == Forms.Keys.F12)
         {
             IsEnabled = !IsEnabled;
-
-            OnToggleChanged?.Invoke(
-                IsEnabled);
-
+            OnToggleChanged?.Invoke(IsEnabled);
             return;
         }
+
         if (!IsEnabled)
         {
             return;
         }
-        // BACKSPACE
+
         if (e.KeyCode == Forms.Keys.Back)
         {
-            if (_buffer.Length > 0)
+            lock (_syncRoot)
             {
-                _buffer.Remove(
-                    _buffer.Length - 1,
-                    1);
+                if (_buffer.Length > 0)
+                {
+                    _buffer.Remove(_buffer.Length - 1, 1);
+                }
             }
-
             return;
         }
 
-        // ENTER
-        if (e.KeyCode == Forms.Keys.Enter)
+        if (e.KeyCode == Forms.Keys.Enter || e.KeyCode == Forms.Keys.Space)
         {
-            _buffer.Clear();
-            return;
-        }
-        if (e.KeyCode == Forms.Keys.Space)
-        {
-            _buffer.Clear();
+            lock (_syncRoot)
+            {
+                _buffer.Clear();
+            }
             return;
         }
 
-        char c =
-            GetCharFromKey(e.KeyCode);
-
+        char c = GetCharFromKey(e.KeyCode);
         if (c == '\0')
         {
             return;
         }
 
-        _buffer.Append(c);
-        Thread.Sleep(20);
-
-        string keyword =
-            _buffer.ToString();
+        string keyword;
+        lock (_syncRoot)
+        {
+            _buffer.Append(c);
+            keyword = _buffer.ToString();
+        }
 
         string converted =
-            KeyboardLayoutHelper
-                .ConvertLayout(keyword);
-
-        var snippets =
-            _db.GetAllSnippets();
+            KeyboardLayoutHelper.ConvertLayout(keyword);
 
         var snippet =
-            snippets.FirstOrDefault(
-                x =>
-                    x.Keyword == keyword
-                    ||
-                    x.Keyword == converted);
+            _cachedSnippets.FirstOrDefault(x => x.Keyword == keyword || x.Keyword == converted);
 
         if (snippet == null)
         {
             return;
         }
 
-        // BLOCK KEY ตัวล่าสุด
         e.Handled = true;
-        Thread.Sleep(80);
+        ReplaceText(keyword, snippet.Content);
 
-        ReplaceText(
-            keyword,
-            snippet.Content);
-
-        _buffer.Clear();
+        lock (_syncRoot)
+        {
+            _buffer.Clear();
+        }
     }
-    private char GetCharFromKey(
-    Forms.Keys key)
+
+    private static char GetCharFromKey(Forms.Keys key)
     {
-        // A-Z
-        if (key >= Forms.Keys.A &&
-            key <= Forms.Keys.Z)
+        if (key >= Forms.Keys.A && key <= Forms.Keys.Z)
         {
-            return key.ToString()
-                .ToLower()[0];
-        }
-        // NUMPAD 0-9
-        if (key >= Forms.Keys.NumPad0 &&
-            key <= Forms.Keys.NumPad9)
-        {
-            return (char)(
-                '0' + (key - Forms.Keys.NumPad0));
+            return key.ToString().ToLower()[0];
         }
 
-        // 0-9
-        if (key >= Forms.Keys.D0 &&
-            key <= Forms.Keys.D9)
+        if (key >= Forms.Keys.NumPad0 && key <= Forms.Keys.NumPad9)
         {
-            return (char)(
-                '0' + (key - Forms.Keys.D0));
+            return (char)('0' + (key - Forms.Keys.NumPad0));
         }
 
-        // .
-        if (key == Forms.Keys.OemPeriod ||
-    key == Forms.Keys.Decimal)
+        if (key >= Forms.Keys.D0 && key <= Forms.Keys.D9)
+        {
+            return (char)('0' + (key - Forms.Keys.D0));
+        }
+
+        if (key == Forms.Keys.OemPeriod || key == Forms.Keys.Decimal)
         {
             return '.';
         }
@@ -150,75 +157,36 @@ public class GlobalHookService
         return '\0';
     }
 
-    private void ProcessKeyword(
-    string keyword)
+    private static void ReplaceText(string keyword, string replacement)
     {
-        if (string.IsNullOrWhiteSpace(keyword))
-        {
-            return;
-        }
-
-        string converted =
-            KeyboardLayoutHelper
-                .ConvertLayout(keyword);
-
-        var snippets =
-            _db.GetAllSnippets();
-
-        var snippet =
-            snippets.FirstOrDefault(
-                x =>
-                    x.Keyword == keyword
-                    ||
-                    x.Keyword == converted);
-
-        if (snippet == null)
-        {
-            return;
-        }
-
-        ReplaceText(
-    keyword,
-    snippet.Content);
-
-        _buffer.Clear();
-    }
-
-    private void ReplaceText(
-    string keyword,
-    string replacement)
-    {
-        // รอให้ key ล่าสุดเข้า textbox ก่อน
         Thread.Sleep(AppSettings.ExpandDelay);
 
-        // ลบ keyword ที่พิมพ์
-        for (int i = 0;
-     i < keyword.Length+1;
-     i++)
+        for (int i = 0; i < keyword.Length + 1; i++)
         {
-            Forms.SendKeys.SendWait(
-                "{BACKSPACE}");
-        
-    }
+            Forms.SendKeys.SendWait("{BACKSPACE}");
+        }
 
         Thread.Sleep(AppSettings.BeforePasteDelay);
 
-        // backup clipboard เดิม
-        string oldClipboard =
-            System.Windows.Clipboard.GetText();
+        var hadClipboardText =
+            System.Windows.Clipboard.ContainsText();
 
-        // set ข้อความใหม่
-        System.Windows.Clipboard.SetText(
-            replacement);
+        var oldClipboard =
+            hadClipboardText ? System.Windows.Clipboard.GetText() : string.Empty;
 
-        // paste
-        Forms.SendKeys.SendWait(
-            "^v");
+        System.Windows.Clipboard.SetText(replacement);
+
+        Forms.SendKeys.SendWait("^v");
 
         Thread.Sleep(AppSettings.AfterPasteDelay);
 
-        // คืน clipboard เดิม
-        System.Windows.Clipboard.SetText(
-            oldClipboard);
+        if (hadClipboardText)
+        {
+            System.Windows.Clipboard.SetText(oldClipboard);
+        }
+        else
+        {
+            System.Windows.Clipboard.Clear();
+        }
     }
 }
