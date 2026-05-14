@@ -65,6 +65,11 @@ public class GlobalHookService
             _buffer.Clear();
             return;
         }
+        if (e.KeyCode == Forms.Keys.Space)
+        {
+            _buffer.Clear();
+            return;
+        }
 
         char c =
             GetCharFromKey(e.KeyCode);
@@ -75,6 +80,7 @@ public class GlobalHookService
         }
 
         _buffer.Append(c);
+        Thread.Sleep(20);
 
         string keyword =
             _buffer.ToString();
@@ -100,6 +106,7 @@ public class GlobalHookService
 
         // BLOCK KEY ตัวล่าสุด
         e.Handled = true;
+        Thread.Sleep(80);
 
         ReplaceText(
             keyword,
@@ -186,7 +193,7 @@ public class GlobalHookService
 
         // ลบ keyword ที่พิมพ์
         for (int i = 0;
-     i < keyword.Length;
+     i < keyword.Length+1;
      i++)
         {
             Forms.SendKeys.SendWait(
