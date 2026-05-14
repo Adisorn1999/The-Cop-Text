@@ -491,35 +491,118 @@
             <ScrollViewer x:Name="BackupPanel"
                           Visibility="Collapsed">
 
-                <StackPanel Margin="32">
+                <StackPanel Margin="36">
 
-                    <TextBlock Text="Backup &amp; Restore"
-                               FontSize="30"
-                               FontWeight="Bold"
-                               Foreground="{DynamicResource PrimaryText}"
-                               Margin="0,0,0,28"/>
+                    <!-- TITLE -->
+                    <TextBlock Text="Backup"
+               FontSize="34"
+               FontWeight="Bold"
+               Foreground="{DynamicResource PrimaryText}"
+               Margin="0,0,0,26"/>
 
+                    <!-- MAIN CARD -->
                     <Border Background="{DynamicResource CardBackground}"
-                            CornerRadius="20"
-                            Padding="24">
+            CornerRadius="24"
+            Padding="26"
+            BorderBrush="{DynamicResource BorderColor}"
+            BorderThickness="1">
 
                         <StackPanel>
 
-                            <Button Content="Export Database"
-                                    Height="48"
-                                    Margin="0,0,0,14"
-                                    Click="ExportButton_Click"/>
+                            <!-- EXPORT -->
+                            <StackPanel>
 
-                            <Button Content="Import Database"
-                                    Height="48"
-                                    Click="ImportButton_Click"/>
+                                <TextBlock Text="สำรองข้อมูล"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryText}"/>
+
+                                <TextBlock Text="สร้างไฟล์สำรองข้อมูลของข้อความทั้งหมด"
+                           FontSize="13"
+                           Foreground="{DynamicResource SecondaryText}"
+                           Margin="0,6,0,20"/>
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <!-- EXPORT BTN -->
+                                    <Button Width="170"
+                                        Height="42"
+                                        HorizontalAlignment="Left"
+                                        Margin="0,0,12,0"
+                                        Click="ExportButton_Click"
+                                        Background="#1677FF"
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        FontWeight="SemiBold"
+                                        Cursor="Hand">      
+
+                                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+
+                                            <TextBlock Text="⤴"
+                                       FontSize="15"
+                                       Margin="0,0,8,0"/>
+
+                                            <TextBlock Text="สร้างข้อมูลสำรอง"/>
+
+                                        </StackPanel>
+
+                                    </Button>
+                                    <StackPanel Orientation="Horizontal">
+                                    </StackPanel>
+
+
+                                </StackPanel>
+
+                            </StackPanel>
+
+                            <!-- DIVIDER -->
+                            <Separator Margin="0,28,0,28"/>
+
+                            <!-- IMPORT -->
+                            <StackPanel>
+
+                                <TextBlock Text="กู้คืนข้อมูล"
+                           FontSize="18"
+                           FontWeight="SemiBold"
+                           Foreground="{DynamicResource PrimaryText}"/>
+
+                                <TextBlock Text="กู้คืนข้อมูลจากไฟล์สำรอง"
+                           FontSize="13"
+                           Foreground="{DynamicResource SecondaryText}"
+                           Margin="0,6,0,20"/>
+
+                                <Button Width="170"
+                                    Height="42"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,0,12,0"
+                                    Click="ImportButton_Click"
+                                    Background="#1677FF"
+                                    Foreground="White"
+                                    BorderThickness="0"
+                                    FontWeight="SemiBold"
+                                    Cursor="Hand">      
+
+                                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+
+                                        <TextBlock Text="⤵"
+                                   FontSize="15"
+                                   Margin="0,0,8,0"/>
+
+                                        <TextBlock Text="เลือกไฟล์คืน"/>
+
+                                    </StackPanel>
+
+                                </Button>
+
+                            </StackPanel>
 
                         </StackPanel>
 
                     </Border>
 
                 </StackPanel>
-
             </ScrollViewer>
 
             <!-- SYSTEM PANEL -->

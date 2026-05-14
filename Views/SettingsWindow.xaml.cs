@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -8,6 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using WpfApp1;
 namespace WpfApp1.Views;
+
+using System.Diagnostics;
+using System.IO;
 
 public partial class SettingsWindow : Window
 {
@@ -319,5 +323,24 @@ public partial class SettingsWindow : Window
 
         menu.BorderThickness =
             new Thickness(0);
+    }
+    private void OpenBackupFolder_Click(
+    object sender,
+    RoutedEventArgs e)
+    {
+        string backupPath =
+            Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "Backups");
+
+        if (!Directory.Exists(backupPath))
+        {
+            Directory.CreateDirectory(
+                backupPath);
+        }
+
+        Process.Start(
+            "explorer.exe",
+            backupPath);
     }
 }
