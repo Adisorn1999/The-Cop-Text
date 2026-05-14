@@ -1,6 +1,7 @@
 ﻿<Application x:Class="WpfApp1.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tb="http://www.hardcodet.net/taskbar"
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
@@ -17,6 +18,30 @@
             <!-- EXTRA -->
             <SolidColorBrush x:Key="MenuActiveBackground"
                              Color="#EEF5FF"/>
+
+            <!-- TRAY -->
+            <tb:TaskbarIcon
+    x:Key="TrayIcon"
+    IconSource="pack://application:,,,/Assets/thecoptext.ico"
+    ToolTipText="TheCopText">
+
+                <tb:TaskbarIcon.ContextMenu>
+
+                    <ContextMenu>
+
+                        <MenuItem Header="เปิดโปรแกรม"
+                                  Click="OpenApp_Click"/>
+
+                        <Separator/>
+
+                        <MenuItem Header="ปิดโปรแกรม"
+                                  Click="ExitApp_Click"/>
+
+                    </ContextMenu>
+
+                </tb:TaskbarIcon.ContextMenu>
+
+            </tb:TaskbarIcon>
 
         </ResourceDictionary>
 

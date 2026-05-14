@@ -8,6 +8,7 @@ using WpfApp1.Views;
 using System.Text;
 using System.Windows.Input;
 using Forms = System.Windows.Forms;
+using Hardcodet.Wpf.TaskbarNotification;
 namespace WpfApp1;
 
 public partial class MainWindow : Window
@@ -28,6 +29,7 @@ public partial class MainWindow : Window
     new();
     private readonly GlobalHookService _hookService =
     new();
+    private bool _allowClose = false;
     public MainWindow()
     {
         InitializeComponent();
@@ -39,6 +41,13 @@ public partial class MainWindow : Window
         ReloadSnippets();
 
         LoadProfileName();
+        Closing += MainWindow_Closing;
+        var tray =
+    (TaskbarIcon)FindResource(
+        "TrayIcon");
+
+        tray.TrayLeftMouseDown +=
+            Tray_TrayLeftMouseDown;
     }
 
     // =========================
@@ -309,4 +318,52 @@ public partial class MainWindow : Window
                 enabled;
         });
     }
+    public void AllowClose()
+    {
+        _allowClose = true;
+    }
+
+    private void MainWindow_Closing(
+        object? sender,
+        System.ComponentModel.CancelEventArgs e)
+    {
+        // ถ้ายังไม่อนุญาตให้ปิดจริง
+        if (!_allowClose)
+        {
+            e.Cancel = true;
+
+            Hide();
+
+            var tray =
+                (TaskbarIcon)FindResource(
+                    "TrayIcon");
+
+            tray.ShowBalloonTip(
+                "TheCopText",
+                "โปรแกรมยังทำงานอยู่เบื้องหลัง",
+                BalloonIcon.Info);
+
+            return;
+        }
+
+        // ปิด tray icon จริง
+        var taskbarIcon =
+            (TaskbarIcon)FindResource(
+                "TrayIcon");
+
+        taskbarIcon.Dispose();
+    }
+
+    private void Tray_TrayLeftMouseDown(
+    object sender,
+    RoutedEventArgs e)
+    {
+        Show();
+
+        WindowState =
+            WindowState.Normal;
+
+        Activate();
+    }
+
 }

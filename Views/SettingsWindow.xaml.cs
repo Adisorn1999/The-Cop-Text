@@ -207,8 +207,16 @@ public partial class SettingsWindow : Window
             return;
         }
 
-        System.Windows.MessageBox.Show(
-            $"บันทึก Delay = {DelayTextBox.Text} ms");
+        if (int.TryParse(
+            DelayTextBox.Text,
+            out int value))
+        {
+            AppSettings.ExpandDelay =
+                value;
+
+            System.Windows.MessageBox.Show(
+                $"บันทึก Delay ก่อน Expand = {value} ms");
+        }
     }
     private void DarkModeToggle_Checked(
     object sender,
@@ -342,5 +350,36 @@ public partial class SettingsWindow : Window
         Process.Start(
             "explorer.exe",
             backupPath);
+    }
+    private void SaveBeforePasteDelay_Click(
+    object sender,
+    RoutedEventArgs e)
+    {
+        if (int.TryParse(
+            BeforePasteDelayTextBox.Text,
+            out int value))
+        {
+            AppSettings.BeforePasteDelay =
+                value;
+
+            System.Windows.MessageBox.Show(
+                "บันทึก Delay ก่อน Paste แล้ว");
+        }
+    }
+
+    private void SaveAfterPasteDelay_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (int.TryParse(
+            AfterPasteDelayTextBox.Text,
+            out int value))
+        {
+            AppSettings.AfterPasteDelay =
+                value;
+
+            System.Windows.MessageBox.Show(
+                "บันทึก Delay หลัง Paste แล้ว");
+        }
     }
 }

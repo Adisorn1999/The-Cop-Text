@@ -10,12 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\thecoptext.ico" />
+    <None Remove="thecoptext.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Core\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="2.0.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.8" />
     <PackageReference Include="MouseKeyHook" Version="5.7.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\thecoptext.ico" />
   </ItemGroup>
 
 </Project>

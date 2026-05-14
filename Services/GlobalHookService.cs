@@ -182,7 +182,7 @@ public class GlobalHookService
     string replacement)
     {
         // รอให้ key ล่าสุดเข้า textbox ก่อน
-        Thread.Sleep(100);
+        Thread.Sleep(AppSettings.ExpandDelay);
 
         // ลบ keyword ที่พิมพ์
         for (int i = 0;
@@ -194,7 +194,7 @@ public class GlobalHookService
         
     }
 
-        Thread.Sleep(50);
+        Thread.Sleep(AppSettings.BeforePasteDelay);
 
         // backup clipboard เดิม
         string oldClipboard =
@@ -208,7 +208,7 @@ public class GlobalHookService
         Forms.SendKeys.SendWait(
             "^v");
 
-        Thread.Sleep(30);
+        Thread.Sleep(AppSettings.AfterPasteDelay);
 
         // คืน clipboard เดิม
         System.Windows.Clipboard.SetText(
