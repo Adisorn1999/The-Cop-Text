@@ -1,0 +1,229 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/MainWindow.xaml.cs b/MainWindow.xaml.cs
+index bb1ea026a7a00a51fc6f5aa64097b4fc82997fd4..b903402318b6d84f7ac89ae109694798433e1567 100644
+--- a/MainWindow.xaml.cs
++++ b/MainWindow.xaml.cs
+@@ -1,67 +1,63 @@
+ ﻿using System.IO;
+ using System.Windows;
+ using System.Windows.Controls;
+ 
+ using WpfApp1.Data;
+ using WpfApp1.Services;
+ using WpfApp1.Views;
+ using System.Text;
+ using System.Windows.Input;
+ using Forms = System.Windows.Forms;
+ using Hardcodet.Wpf.TaskbarNotification;
+ namespace WpfApp1;
+ 
+ public partial class MainWindow : Window
+ {
+-    private bool isExpansionEnabled =
+-        true;
+-
+     public bool IsDarkModeEnabled =
+         false;
+ 
+     private readonly SQLiteService _db =
+         new();
+ 
+-    private readonly GlobalHookService _hook =
+-    new();
+-
+     private readonly StringBuilder _buffer =
+     new();
+     private readonly GlobalHookService _hookService =
+     new();
+     private bool _allowClose = false;
+     public MainWindow()
+     {
+         InitializeComponent();
+ 
+         _hookService.Start();
+         _hookService.OnToggleChanged +=
+     HookService_OnToggleChanged;
+ 
+         ReloadSnippets();
+ 
++        _hookService.RefreshSnippets();
++
+         LoadProfileName();
+         Closing += MainWindow_Closing;
+         var tray =
+     (TaskbarIcon)FindResource(
+         "TrayIcon");
+ 
+         tray.TrayLeftMouseDown +=
+             Tray_TrayLeftMouseDown;
+     }
+ 
+     // =========================
+     // SAVE
+     // =========================
+ 
+     private void SaveButton_Click(
+         object sender,
+         RoutedEventArgs e)
+     {
+         var keyword =
+             KeywordTextBox.Text;
+ 
+         var content =
+             ContentTextBox.Text;
+ 
+         if (string.IsNullOrWhiteSpace(keyword))
+@@ -78,50 +74,52 @@ public partial class MainWindow : Window
+                 "กรุณากรอกข้อความ");
+ 
+             return;
+         }
+ 
+         if (_db.KeywordExists(keyword))
+         {
+             _db.UpdateSnippet(
+                 keyword,
+                 content);
+ 
+             System.Windows.MessageBox.Show(
+                 "อัปเดตสำเร็จ");
+         }
+         else
+         {
+             _db.AddSnippet(
+                 keyword,
+                 content);
+ 
+             System.Windows.MessageBox.Show(
+                 "บันทึกสำเร็จ");
+         }
+ 
+         ReloadSnippets();
++
++        _hookService.RefreshSnippets();
+     }
+ 
+     // =========================
+     // RELOAD
+     // =========================
+ 
+     public void ReloadSnippets()
+     {
+         var snippets =
+             _db.GetAllSnippets();
+ 
+         SnippetListBox.ItemsSource =
+             null;
+ 
+         SnippetListBox.ItemsSource =
+             snippets;
+     }
+ 
+     // =========================
+     // SELECT
+     // =========================
+ 
+     private void SnippetListBox_SelectionChanged(
+         object sender,
+         SelectionChangedEventArgs e)
+@@ -156,50 +154,52 @@ public partial class MainWindow : Window
+                 "กรุณาเลือก Keyword");
+ 
+             return;
+         }
+ 
+         var result =
+             System.Windows.MessageBox.Show(
+                 $"ลบ '{keyword}' ?",
+                 "ยืนยัน",
+                 System.Windows.MessageBoxButton.YesNo);
+ 
+         if (result != System.Windows.MessageBoxResult.Yes)
+         {
+             return;
+         }
+ 
+         _db.DeleteSnippet(
+             keyword);
+ 
+         KeywordTextBox.Clear();
+ 
+         ContentTextBox.Clear();
+ 
+         ReloadSnippets();
+ 
++        _hookService.RefreshSnippets();
++
+         System.Windows.MessageBox.Show(
+             "ลบสำเร็จ");
+     }
+ 
+     // =========================
+     // SEARCH
+     // =========================
+ 
+     private void SearchTextBox_TextChanged(
+         object sender,
+         TextChangedEventArgs e)
+     {
+         if (SnippetListBox == null)
+         {
+             return;
+         }
+ 
+         var keyword =
+             SearchTextBox.Text;
+ 
+         var snippets =
+             _db.SearchSnippets(keyword);
+ 
+         SnippetListBox.ItemsSource =
+             snippets;
+@@ -329,41 +329,43 @@ public partial class MainWindow : Window
+     {
+         // ถ้ายังไม่อนุญาตให้ปิดจริง
+         if (!_allowClose)
+         {
+             e.Cancel = true;
+ 
+             Hide();
+ 
+             var tray =
+                 (TaskbarIcon)FindResource(
+                     "TrayIcon");
+ 
+             tray.ShowBalloonTip(
+                 "TheCopText",
+                 "โปรแกรมยังทำงานอยู่เบื้องหลัง",
+                 BalloonIcon.Info);
+ 
+             return;
+         }
+ 
+         // ปิด tray icon จริง
+         var taskbarIcon =
+             (TaskbarIcon)FindResource(
+                 "TrayIcon");
+ 
++        _hookService.Stop();
++
+         taskbarIcon.Dispose();
+     }
+ 
+     private void Tray_TrayLeftMouseDown(
+     object sender,
+     RoutedEventArgs e)
+     {
+         Show();
+ 
+         WindowState =
+             WindowState.Normal;
+ 
+         Activate();
+     }
+ 
+ }
+\ No newline at end of file
+ 
+EOF
+)
