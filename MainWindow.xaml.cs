@@ -13,17 +13,11 @@ namespace WpfApp1;
 
 public partial class MainWindow : Window
 {
-    private bool isExpansionEnabled =
-        true;
-
     public bool IsDarkModeEnabled =
         false;
 
     private readonly SQLiteService _db =
         new();
-
-    private readonly GlobalHookService _hook =
-    new();
 
     private readonly StringBuilder _buffer =
     new();
@@ -39,6 +33,8 @@ public partial class MainWindow : Window
     HookService_OnToggleChanged;
 
         ReloadSnippets();
+
+        _hookService.RefreshSnippets();
 
         LoadProfileName();
         Closing += MainWindow_Closing;
@@ -100,6 +96,8 @@ public partial class MainWindow : Window
         }
 
         ReloadSnippets();
+
+        _hookService.RefreshSnippets();
     }
 
     // =========================
@@ -177,6 +175,8 @@ public partial class MainWindow : Window
         ContentTextBox.Clear();
 
         ReloadSnippets();
+
+        _hookService.RefreshSnippets();
 
         System.Windows.MessageBox.Show(
             "ลบสำเร็จ");
@@ -350,6 +350,8 @@ public partial class MainWindow : Window
         var taskbarIcon =
             (TaskbarIcon)FindResource(
                 "TrayIcon");
+
+        _hookService.Stop();
 
         taskbarIcon.Dispose();
     }
